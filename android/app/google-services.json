@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "884502786471",
+    "firebase_url": "https://roadway-core-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "roadway-core",
+    "storage_bucket": "roadway-core.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884502786471:android:92501d417ba453839a4682",
+        "android_client_info": {
+          "package_name": "com.appzler.deliverzler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "884502786471-mrako5fefs897lkg5sn9ei9l5jkb2hpl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIse5zEqNUNZmlOEATdxSW-XeyOQQULQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884502786471-mrako5fefs897lkg5sn9ei9l5jkb2hpl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "884502786471-kq183ng0crnsjncs43lkqtm4kpcn0f3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appzler.deliverzler"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884502786471:android:e6d8965da118dbc39a4682",
+        "android_client_info": {
+          "package_name": "com.example.roadway_core"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "884502786471-faohqbb2c6grc0rb8cth289u7q9qvbud.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.roadway_core",
+            "certificate_hash": "d26adc17d4774c9855f5ce08d96fd032a5dde0cd"
+          }
+        },
+        {
+          "client_id": "884502786471-mrako5fefs897lkg5sn9ei9l5jkb2hpl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIse5zEqNUNZmlOEATdxSW-XeyOQQULQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884502786471-mrako5fefs897lkg5sn9ei9l5jkb2hpl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "884502786471-kq183ng0crnsjncs43lkqtm4kpcn0f3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appzler.deliverzler"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884502786471:android:e3b64adeedf84fed9a4682",
+        "android_client_info": {
+          "package_name": "com.example.xpressnepal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "884502786471-mrako5fefs897lkg5sn9ei9l5jkb2hpl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIse5zEqNUNZmlOEATdxSW-XeyOQQULQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884502786471-mrako5fefs897lkg5sn9ei9l5jkb2hpl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "884502786471-kq183ng0crnsjncs43lkqtm4kpcn0f3b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appzler.deliverzler"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
