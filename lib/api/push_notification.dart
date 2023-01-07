@@ -1,16 +1,13 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:xpressnepal/globalVariable.dart';
 import 'package:xpressnepal/model/trip_details.dart';
-import 'package:xpressnepal/widget/NotificationDialog.dart';
+import 'package:xpressnepal/screen/NewDelivery.dart';
 
 import '../provider/app_data.dart';
 
@@ -62,42 +59,52 @@ class PushNotificationService {
   }
 
   static fetchRideInfo(String rideID, context) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return const CupertinoActivityIndicator(
-          radius: 20,
-          color: Colors.white,
-        );
-      },
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return const CupertinoActivityIndicator(
+    //       radius: 20,
+    //       color: Colors.white,
+    //     );
+    //   },
+    // );
+    print(rideID);
 
     final rideRef = FirebaseDatabase.instance.ref();
     final snapshot = await rideRef.child('riderequest/$rideID').get();
-    Navigator.pop(context);
+    // Navigator.pop(context);
     if (snapshot.exists) {
-      print('snapshot is ${snapshot.value}');
       try {
         Object? values = snapshot.value;
         Map<dynamic, dynamic> map = values as Map<dynamic, dynamic>;
-
+        print(map);
+        print('here 1');
         double pickupLat = map['location']['latitude'];
+        print('here 2');
+
         double pickupLng = map['location']['longitude'];
+        print('here 3');
 
         // latLng
         LatLng pickupLatLng = LatLng(pickupLat, pickupLng);
         String pickupAddress = map['pickup_address'];
+        print('here 4');
 
         // destination
         double destinationLat = map['destination']['latitude'];
+        print('here 5');
+
         double destinationLng = map['destination']['longitude'];
+        print('here 6');
+
         String destinationAddress = map['destination_address'];
+        print('here 7');
 
         String paymentMethod = map['payment_method'];
+        print('here 8');
+
         String riderName = map['rider_name'];
-        String requestUserId = map['user_id'];
-        print(
-            "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrequest_user_id: $requestUserId");
+        print('here 9');
 
         TripDetails tripDetails = TripDetails();
         tripDetails.rideID = rideID;
@@ -107,31 +114,25 @@ class PushNotificationService {
         tripDetails.destination = LatLng(destinationLat, destinationLng);
         tripDetails.paymentMethod = paymentMethod;
         tripDetails.riderName = riderName;
-
-        // update on provider
+        print('here 10');
         Provider.of<AppData>(context, listen: false)
             .updateDriverPickUpLocation(pickupLatLng);
-        // Provider.of<AppData>(context, listen: false)
-        //     .updateSetRequestId(requestUserId);
-
-        // AssetsAudioPlayer.newPlayer().open(
-        //   Audio("sounds/alert.mp3"),
-        //   autoStart: true,
-        //   showNotification: true,
-        // );
-        print('gettingx is $tripDetails');
-
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) => NotificationDialog(
-                  tripDetails: tripDetails,
-                ));
+        print('here 11');
+        print(tripDetails.pickupAddress);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NewDelivery(
+                tripDetails: tripDetails,
+              ),
+            ));
       } catch (e) {
+        print('here 12');
+
         print(e);
       }
     } else {
-      print('snapshot is not exist');
+      print('here snapshot is not exist');
     }
   }
 }

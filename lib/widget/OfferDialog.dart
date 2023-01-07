@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:xpressnepal/api/push_notification.dart';
+import 'package:xpressnepal/model/trip_details.dart';
 
 class Offerialog extends StatefulWidget {
   Offerialog({super.key, required this.fares, required this.documentKey});
@@ -13,7 +17,10 @@ class Offerialog extends StatefulWidget {
 }
 
 class _OfferialogState extends State<Offerialog> {
+  String status = '';
   late int fares;
+
+  String? driverID;
   // INCRESE FARES
   void increaseFares() {
     setState(() {
@@ -29,22 +36,58 @@ class _OfferialogState extends State<Offerialog> {
     createOffer(widget.documentKey);
   }
 
-  void createOffer(String documentKey) {
-    String userId = FirebaseAuth.instance.currentUser!.uid;
-    DatabaseReference rideRef =
-        FirebaseDatabase.instance.ref('riderequest/$documentKey/offer');
+  StreamSubscription<DatabaseEvent>? rideSubscription;
 
-    final json = {'offerPrice': fares, 'offerBy': 'Anonymous'};
-    rideRef.child(userId).set(json);
+  String? rider_status;
+  final tripDetails = TripDetails();
+
+  void createOffer(String documentKey) {
+    String firstName = '';
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    DatabaseReference usrRef =
+        FirebaseDatabase.instance.ref('user/$userId/firstName');
+    try {
+      usrRef.once().then((DatabaseEvent snapshot) {
+        DatabaseReference rideRef =
+            FirebaseDatabase.instance.ref('riderequest/$documentKey/offer');
+
+        final json = {
+          'offerPrice': fares,
+          'offerBy': snapshot.snapshot.value,
+          'offerByID': userId
+        };
+
+        rideRef.child(userId).set(json);
+      });
+    } catch (e) {
+      print("xxl error $e");
+    }
+
+    DatabaseReference newRequestRef =
+        FirebaseDatabase.instance.ref().child('riderequest/$documentKey');
+
+    rideSubscription = newRequestRef.onValue.listen((event) async {
+      print("xxl listeninggg");
+      if (event.snapshot.value == null) {
+        return;
+      }
+      Object? values = event.snapshot.value;
+      Map<dynamic, dynamic> map = values as Map<dynamic, dynamic>;
+      status = map['status'].toString();
+      driverID = map['driverID'].toString();
+      final currentUser = FirebaseAuth.instance.currentUser;
+
+      if (status == 'accepted' && driverID == currentUser!.uid) {
+        Navigator.pop(context);
+        PushNotificationService.fetchRideInfo(documentKey, context);
+      }
+    });
   }
 
   void updateOffer(String documentKey) {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     DatabaseReference rideRef =
         FirebaseDatabase.instance.ref('riderequest/$documentKey/offer');
-
-    // if user already offered then update the offer
-
     if (rideRef.child(userId) != null) {
       final json = {'offerPrice': fares, 'offerBy': 'Anonymous'};
       rideRef.child(userId).update(json);

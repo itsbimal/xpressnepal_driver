@@ -34,7 +34,7 @@ class _NewDeliveryState extends State<NewDelivery> {
 
   @override
   void initState() {
-    acceptTrip();
+    print(widget.tripDetails.pickup);
     super.initState();
   }
 
@@ -71,30 +71,6 @@ class _NewDeliveryState extends State<NewDelivery> {
   String paymentMethod = "";
   var geoLocator = Geolocator();
   BitmapDescriptor? movingMarker = BitmapDescriptor.defaultMarker;
-
-  void acceptTrip() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.bestForNavigation);
-      rideRef = FirebaseDatabase.instance
-          .ref('riderequest/${widget.tripDetails.rideID}');
-      rideRef!.child('status').set('accepted');
-      rideRef!.child('driver_name').set(name);
-      rideRef!.child('driver_id').set(currentUser!.uid);
-
-      Map locationMap = {
-        'latitude': position.latitude,
-        'longitude': position.longitude,
-      };
-      rideRef!.child('driver_location').set(locationMap);
-      DatabaseReference historyRef = FirebaseDatabase.instance.ref().child(
-          'user/${currentUser!.uid}/history/${widget.tripDetails.rideID}');
-
-      historyRef.set(true);
-    } catch (e) {
-      print('Error : $e');
-    }
-  }
 
   void getLocationUpdates() {
     ridePositionStream =
@@ -300,7 +276,7 @@ class _NewDeliveryState extends State<NewDelivery> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Ongoing trip",
+                        "Order Delivery",
                         style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,

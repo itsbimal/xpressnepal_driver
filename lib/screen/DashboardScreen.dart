@@ -20,6 +20,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final _currentIndex = 0;
   late GoogleMapController controller;
+  StreamSubscription<DatabaseEvent>? rideSubscription;
 
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(27.70539567242726, 85.32745790722771),
@@ -67,6 +68,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
+ 
+
   void _getLocatonLiveUpdates() {
     homeTabPositionStream =
         Geolocator.getPositionStream().listen((Position position) {
@@ -88,7 +91,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   // create offer on firebase
-  
 
   bool isAvailable = false;
   @override
@@ -144,98 +146,104 @@ class _DashboardScreenState extends State<DashboardScreen> {
               }
 
               if (snapshot.hasData && snapshot.data!.snapshot.value != null) {
-                Map<dynamic, dynamic> delivery_val =
+                Map<dynamic, dynamic> deliveryVal =
                     snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
 
                 // Iterate through the ride history objects and build a list
                 return ListView.builder(
                     shrinkWrap: true,
-                    itemCount: delivery_val.length,
+                    itemCount: deliveryVal.length,
                     reverse: true,
                     itemBuilder: (context, index) {
-                      var delivery = delivery_val.values.elementAt(index);
-                      String documentKey = delivery_val.keys.elementAt(index);
-                      return Card(
-                        child: ListTile(
-                            title: Text(
-                              'ORDER: $documentKey',
-                            ),
-                            leading: const Icon(Icons.notifications_active),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Store ${delivery['pickup_address']}'),
-                                Text(
-                                    'Store ${delivery['destination_address']}'),
+                      var delivery = deliveryVal.values.elementAt(index);
+                      String documentKey = deliveryVal.keys.elementAt(index);
 
-                                // BUTTONS
-                                Row(
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        // Navigator.pop(context);
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.red,
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(5),
-                                            bottomLeft: Radius.circular(5),
+                      // if status is waiting then show the card else not
+                      if (delivery['status'] == 'waiting') {
+                        return Card(
+                          child: ListTile(
+                              title: Text(
+                                'ORDER: $documentKey',
+                              ),
+                              leading: const Icon(Icons.notifications_active),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Store ${delivery['pickup_address']}'),
+                                  Text(
+                                      'Store ${delivery['destination_address']}'),
+
+                                  // BUTTONS
+                                  Row(
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          // Navigator.pop(context);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(5),
+                                              bottomLeft: Radius.circular(5),
+                                            ),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Reject',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
-                                      child: const Text(
-                                        'Reject',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          // show the dialog
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Offerialog(
+                                                  fares: delivery['fares'],
+                                                  documentKey: documentKey,
+                                                );
+                                              });
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.green,
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(5),
+                                              bottomRight: Radius.circular(5),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        // show the dialog
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Offerialog(
-                                                fares: delivery['fares'],
-                                                documentKey: documentKey,
-                                              );
-                                            });
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.green,
-                                        shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(5),
-                                            bottomRight: Radius.circular(5),
+                                        child: const Text(
+                                          'Offer your fare',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
                                           ),
                                         ),
                                       ),
-                                      child: const Text(
-                                        'Accept',
-                                        style: TextStyle(
-                                          fontSize: 15,
+                                    ],
+                                  )
+                                ],
+                              ),
+                              trailing: Column(
+                                children: [
+                                  Text('रू ${delivery['fares']}',
+                                      style: const TextStyle(
+                                          color: Colors.green,
                                           fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            trailing: Column(
-                              children: [
-                                Text('रू ${delivery['fares']}',
-                                    style: const TextStyle(
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20)),
-                                const Text('5KM RIDE'),
-                              ],
-                            )),
-                      );
+                                          fontSize: 20)),
+                                  const Text('5KM RIDE'),
+                                ],
+                              )),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
                     });
               } else {
                 return const Center(

@@ -29,7 +29,6 @@ class MyApp extends StatelessWidget {
           '/navbar': (context) => const ButtonNavbar(),
           '/signin': (context) => const SigninScreen(),
           '/otp': (context) => const otpVerificationScreen(),
-          // test screen
           '/test': (context) => const Test2(),
         },
       ),

@@ -70,13 +70,13 @@ class NotificationDialog extends StatelessWidget {
       Geofire.removeLocation(currentUser!.uid);
       print('here 1');
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => NewDelivery(
-                  tripDetails: tripDetails,
-                )),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //       builder: (context) => NewDelivery(
+      //             tripDetails: tripDetails,
+      //           )),
+      // );
     } else if (thisRideId == 'cancelled') {
       const SnackBar(content: Text('Ride Cancelled')).show(context);
     } else if (thisRideId == 'timeout') {
