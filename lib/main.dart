@@ -5,6 +5,7 @@ import 'package:xpressnepal/provider/app_data.dart';
 import 'package:xpressnepal/screen/ButtonNavbar.dart';
 import 'package:xpressnepal/screen/OtpScreen.dart';
 import 'package:xpressnepal/screen/SigninScreen.dart';
+import 'package:xpressnepal/screen/Test2.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -28,6 +29,8 @@ class MyApp extends StatelessWidget {
           '/navbar': (context) => const ButtonNavbar(),
           '/signin': (context) => const SigninScreen(),
           '/otp': (context) => const otpVerificationScreen(),
+          // test screen
+          '/test': (context) => const Test2(),
         },
       ),
     );

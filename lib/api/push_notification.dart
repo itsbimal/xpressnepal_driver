@@ -10,7 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:xpressnepal/globalVariable.dart';
 import 'package:xpressnepal/model/trip_details.dart';
-import 'package:xpressnepal/screen/NotificationDialog.dart';
+import 'package:xpressnepal/widget/NotificationDialog.dart';
 
 import '../provider/app_data.dart';
 

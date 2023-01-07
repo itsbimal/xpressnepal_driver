@@ -15,6 +15,7 @@ class NotificationDialog extends StatelessWidget {
 
   void checkAvailability(context) async {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return Container(
