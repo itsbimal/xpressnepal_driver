@@ -1,6 +1,6 @@
 # xpressnepal
 
-A new Flutter project.
+Complete driver application for XpressNepal
 
 ## Getting Started
 
